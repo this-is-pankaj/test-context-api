@@ -3,9 +3,8 @@ const { getAllMediaForSession, getMediaContextForSession, getContext } = require
 
 module.exports = async (req, res) => {
   try {
-    console.log('Req Id: ', req.reqId);
     const { sessionId } = req.params;
-    // Fetch the session status
+    // Fetch the session status. If found proceed to next step
     const sessionInfo = await getSessionStatus(sessionId);
     const sessionMedias = await getAllMediaForSession(sessionId);
     const mediaContext = await getMediaContextForSession(sessionId);
@@ -40,9 +39,10 @@ module.exports = async (req, res) => {
         return  b.probability - a.probability;
       });
     }
+    console.log(req.reqId, sessionInfo);
     return res.status(200).send(sessionInfo);
   } catch (error: any) {
-    console.error('Error happened', error);
-    return res.status(error.response.status).json({ message: error.response.data });
+    console.error(req.reqId, { error, status: error.response?.status || 500 });
+    return res.status(error.response?.status || 500).json({ message: error.response?.data || 'Internal server error' });
   }
 };
