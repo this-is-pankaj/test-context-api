@@ -25,6 +25,7 @@ type: 'candidate test task'
         <ul>
             <li><a href="#prerequisites">Prerequisites</a></li>
             <li><a href="#installation">Installation</a></li>
+            <li><a href="#endpoints">Endpoints</a></li>
             <li><a href="#testing">Testing</a></li>
         </ul>
     </li>
@@ -133,7 +134,38 @@ default packaged NPM
    ```sh
    npm start
    ```
-   
+
+### Endpoints
+The application has the following endpoints
+```sh
+GET /api/sessions/:sessionId
+```
+The api requires a valid sessionId. Upon successful validation, expect a response structure like the following:
+```sh
+{
+  "id": "session-id", // SessionID (string)
+  "status": "status", // Status of the session. Possible vlaues - internal_manual_review (string)
+  "media": {          // Object holding different media types (Object)
+    "front": [
+      {
+          "id": "media-context-id", // Id for the given media info (string)
+          "mediaId": "media-id", // Media ID (string)
+          "context": "media-context", // Media context; possible values - front, back, none (string)
+          "probability": 0.345 // Probabilty between 0 - 1 (number)
+      },
+      ...
+    ],
+    "back": [
+      ...
+    ],
+    "none": [
+      ...
+    ]
+  }
+}
+```
+
+
 ### Testing
 1. Run the tests
    ```sh
